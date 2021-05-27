@@ -13,7 +13,7 @@ StringUnit::StringUnit() {
 
     int length = rand()%50 + 1;
     for(int i=0; i<length; i++)
-        this->data +=rand()%('}' - ' ') + ' ';
+        this->data +=rand()%('}' - ' ' + 1) + ' ';
 }
 
 StringUnit::StringUnit(std::string data) {
@@ -38,18 +38,26 @@ void StringUnit::mutate(double mutationRate) {
     int index = distributionLength(engine);*/
 
     double chance = (double)(rand()%1000)/1000.;
-    int index = rand()%(int)this->data.size();
-    char character = rand()%('}' - ' ') + ' ';
 
-    if(chance<mutationRate*0.333) {
-        // change random index to random character
-        this->data[index] = character;
-    } else if(chance<mutationRate*0.666) {
-        // delete random character
-        this->data.erase(this->data.begin() + index);
-    } else {
-        // add random character in random place
-        this->data.insert(this->data.begin() + index, character);
+    if(chance>mutationRate)
+        return;
+
+    std::size_t index = rand()%this->data.size();
+    char character = rand()%('}' - ' ' + 1) + ' ';
+
+    switch(rand()%3) {
+        case 0: {
+            // change character at random index to random character
+            this->data[index] = character;
+        } break;
+        case 1: {
+            // delete random character
+            this->data.erase(this->data.begin() + index);
+        } break;
+        case 2: {
+            // add random character in random place
+            this->data.insert(this->data.begin() + index, character);
+        } break;
     }
 }
 
@@ -67,41 +75,20 @@ double StringUnit::fitness() const {
     return fitness;
 }
 
-/*Unit* StringUnit::crossover(Unit *str2unit) {
-    StringUnit *str2 = dynamic_cast<StringUnit*>(str2unit);
-
+StringUnit StringUnit::crossover(const StringUnit &str1, const StringUnit &str2) {
     /*std::default_random_engine engine(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_real_distribution<double> distribution01(0, 1);
 
     double fraq = distribution01(engine);*/
 
-    /*double fraq = (double)(rand()%1000)/1000.;
+    std::size_t pivot = rand()%std::min(str1.data.size(), str2.data.size());
     
-    std::string str;
+    std::string str = "";
 
-    for(std::size_t i=0; i<this->data.size()*fraq; i++)                      str +=this->data[i];
-    for(std::size_t i=str2->data.size()*fraq+1; i<str2->data.size(); i++)     str +=str2->data[i];
+    for(std::size_t i=0; i<pivot; i++)                      str +=str1.data[i];
+    for(std::size_t i=pivot+1; i<str2.data.size(); i++)     str +=str2.data[i];
 
-    return static_cast<Unit*>(new StringUnit(str));
-}*/
-
-Unit* StringUnit::crossover(Unit *str1unit, Unit *str2unit) {
-    StringUnit *str1 = dynamic_cast<StringUnit*>(str1unit);
-    StringUnit *str2 = dynamic_cast<StringUnit*>(str2unit);
-
-    /*std::default_random_engine engine(std::chrono::system_clock::now().time_since_epoch().count());
-    std::uniform_real_distribution<double> distribution01(0, 1);
-
-    double fraq = distribution01(engine);*/
-
-    double fraq = (double)(rand()%1000)/1000.;
-    
-    std::string str;
-
-    for(std::size_t i=0; i<str1->data.size()*fraq; i++)                      str +=str1->data[i];
-    for(std::size_t i=str2->data.size()*fraq+1; i<str2->data.size(); i++)     str +=str2->data[i];
-
-    return static_cast<Unit*>(new StringUnit(str));
+    return StringUnit(str);
 }
 
 std::ostream & operator<<(std::ostream &lhs, const StringUnit &rhs) {

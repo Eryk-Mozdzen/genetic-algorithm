@@ -17,6 +17,6 @@ int main() {
         if(result.fitness()>=30)
             break;
 
-        genetic.nextGeneration(0.05);
+        genetic.evaluateGeneration(0.05);
     }
 }

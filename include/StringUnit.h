@@ -6,9 +6,8 @@
 //#include <chrono>
 #include <cstdio>
 #include <cmath>
-#include "GeneticAlgorith.h"
 
-class StringUnit : public Unit {
+class StringUnit {
 private:
     std::string data;
 public:
@@ -20,8 +19,7 @@ public:
 
     void mutate(double);
     double fitness() const;
-    //Unit* crossover(Unit *);
-    static Unit* crossover(Unit *, Unit *);
+    static StringUnit crossover(const StringUnit &, const StringUnit &);
 };
 
 std::ostream & operator<<(std::ostream &, const StringUnit &);
