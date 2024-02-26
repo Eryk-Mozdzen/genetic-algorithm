@@ -1,12 +1,18 @@
 cmake_minimum_required(VERSION 3.16.3)
 
-project(Genetic_Algorithm_Example)
+project(genetic-algorithm)
 
-add_compile_options(-Wall -pedantic -std=c++17 -g)
+add_executable(${PROJECT_NAME}
+    "src/main.cpp"
+    "src/String.cpp"
+)
 
-file(GLOB SOURCE "src/*.cpp")
-add_executable(${PROJECT_NAME} ${SOURCE})
+target_include_directories(${PROJECT_NAME} PUBLIC
+    "include"
+)
 
-include_directories(include)
-
-target_link_libraries(${PROJECT_NAME} m)
+target_compile_options(${PROJECT_NAME} PUBLIC
+    -Wall
+    -Wextra
+    -Wpedantic
+)

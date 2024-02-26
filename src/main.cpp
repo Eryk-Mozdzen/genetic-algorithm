@@ -1,22 +1,26 @@
 #include <iostream>
-#include "StringUnit.h"
-#include "GeneticAlgorith.h"
-#include <cstdio>
-#include <ctime>
+#include <random>
+
+#include "Genetic.h"
+#include "String.h"
 
 int main() {
-    srand(time(NULL));
+    std::random_device rd;
 
-    GeneticAlgorithm<StringUnit> genetic(1000);
+    Genetic<String> genetic(rd, 1000);
 
     while(true) {
-        StringUnit result = genetic.getFittest();
+        const String &result = genetic.fittest();
 
-        std::cout << "Generation: " << genetic.getGeneration() << "\tBest: " << result << "\tFitness: " << result.fitness() << std::endl;
+        std::cout << " epoch:   " << genetic.epoch();
+        std::cout << " fitness: " << result.fitness();
+        std::cout << " result:  " << result;
+        std::cout << std::endl;
 
-        if(result.fitness()>=30)
+        if(result.fitness()>=30) {
             break;
+        }
 
-        genetic.evaluateGeneration(0.05);
+        genetic.evaluate();
     }
 }
