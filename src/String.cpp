@@ -1,61 +1,54 @@
+#include <cstring>
+
 #include "String.h"
 
-const std::string String::target = "I'm Skynet and I will be back!";
+constexpr char target[] = "I'm Skynet and I will be back!";
 
-String::String() {
-    for(unsigned int i=0; i<target.size(); i++) {
-        data +=" ";
-    }
-}
-
-String::String(std::random_device &rd) {
-    std::default_random_engine gen(rd());
+String::String(std::mt19937 &gen) {
     std::uniform_int_distribution<char> distrib(' ', '}');
 
-    for(unsigned int i=0; i<target.size(); i++) {
+    for(unsigned int i=0; i<strlen(target); i++) {
         data +=distrib(gen);
     }
 }
 
-double String::fitness() const {
-    double fitness = 0;
+String::String(std::mt19937 &gen, const String &parent1, const String &parent2) {
+    std::bernoulli_distribution distributionBool;
 
-    for(unsigned int i=0; i<target.size(); i++) {
-        if(data[i]==target[i]) {
-            fitness++;
+    for(unsigned int i=0; i<strlen(target); i++) {
+        if(distributionBool(gen)) {
+            data +=parent1.data[i];
+        } else {
+            data +=parent2.data[i];
         }
     }
 
-    return fitness;
-}
-
-String String::crossover(std::random_device &rd, const String &parent1, const String &parent2) {
-    std::default_random_engine gen(rd());
-    std::uniform_int_distribution<int> distrib(0, target.size());
-
-    const int pivot = distrib(gen);
-
-    String child;
-
-    for(int i=0; i<pivot; i++) {
-        child.data[i] = parent1.data[i];
-    }
-
-    for(unsigned int i=pivot; i<target.size(); i++) {
-        child.data[i] = parent2.data[i];
-    }
-
+    std::uniform_int_distribution<int> distrib(0, strlen(target));
     std::uniform_real_distribution<double> distribution(0, 1);
     std::uniform_int_distribution<char> distributionCharacter(' ', '}');
 
-    if(distribution(gen)<0.05) {
+    while(distribution(gen)<0.05) {
         const int index = distrib(gen);
         const char character = distributionCharacter(gen);
 
-        child.data[index] = character;
+        data[index] = character;
+    }
+}
+
+double String::fitness() const {
+    int diff = 0;
+
+    for(unsigned int i=0; i<strlen(target); i++) {
+        if(data[i]!=target[i]) {
+            diff++;
+        }
     }
 
-    return child;
+    if(diff==0) {
+        return std::numeric_limits<double>::infinity();
+    }
+
+    return 1./diff;
 }
 
 std::ostream & operator<<(std::ostream &stream, const String &string) {
