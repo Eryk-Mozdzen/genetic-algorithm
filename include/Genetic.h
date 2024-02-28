@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <random>
-#include <iostream>
+#include <algorithm>
 
 template<typename T>
 class Genetic {
@@ -32,44 +32,24 @@ Genetic<T>::Genetic(std::mt19937 &gen, const int size) : gen{gen}, counter{0} {
 
 template<typename T>
 const T & Genetic<T>::random(const std::vector<double> &weights) {
-    double sum = 0;
+    std::discrete_distribution<int> distrib(weights.begin(), weights.end());
 
-    for(const double &w : weights) {
-        sum +=w;
-    }
+    const int index = distrib(gen);
 
-    std::uniform_real_distribution<> distrib(0, sum);
-
-    const double number = distrib(gen);
-    double cumulative = 0;
-
-    for(unsigned int i=0; i<weights.size(); i++) {
-        cumulative +=weights[i];
-
-        if(number<cumulative) {
-            return population[i];
-        }
-    }
-
-    return population[0];
+    return population.at(index);
 }
 
 template<typename T>
 const T & Genetic<T>::fittest(const std::vector<double> &weights) const {
-    int index = 0;
+    const auto it = std::max_element(weights.begin(), weights.end());
+    const int index = std::distance(weights.begin(), it);
 
-    for(unsigned int i=0; i<weights.size(); i++) {
-        if(weights[i]>weights[index]) {
-            index = i;
-        }
-    }
-
-    return population[index];
+    return population.at(index);
 }
 
 template<typename T>
 const T & Genetic<T>::fittest() const {
-    return population[0];
+    return population.front();
 }
 
 template<typename T>
@@ -79,11 +59,12 @@ int Genetic<T>::epoch() const {
 
 template<typename T>
 void Genetic<T>::evaluate() {
-    std::vector<double> fitness(population.size());
+    std::vector<double> fitness;
+    fitness.reserve(population.size());
 
-    for(unsigned int i=0; i<population.size(); i++) {
-        fitness[i] = population[i].fitness();
-    }
+    std::transform(population.begin(), population.end(), std::back_inserter(fitness), [](const T &member) {
+        return member.fitness();
+    });
 
     std::vector<T> next;
     next.reserve(population.size());

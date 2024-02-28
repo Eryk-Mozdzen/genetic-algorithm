@@ -14,9 +14,8 @@ int main() {
     while(true) {
         const String &result = genetic.fittest();
 
-        std::cout << std::setprecision(3) << std::fixed;
         std::cout << " epoch   " << genetic.epoch();
-        std::cout << " fitness " << result.fitness();
+        std::cout << " fitness " << std::setprecision(3) << std::fixed << std::setw(8) << result.fitness();
         std::cout << " result  " << result;
         std::cout << std::endl;
 
