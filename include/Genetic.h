@@ -6,7 +6,7 @@
 
 template<typename T>
 class Genetic {
-    std::mt19937 &gen;
+    std::mt19937 gen;
     std::vector<T> population;
     int counter;
 
@@ -14,7 +14,7 @@ class Genetic {
     const T & fittest(const std::vector<double> &weights) const;
 
 public:
-    Genetic(std::mt19937 &gen, const int size);
+    Genetic(const int size);
 
     const T & fittest() const;
     int epoch() const;
@@ -22,7 +22,10 @@ public:
 };
 
 template<typename T>
-Genetic<T>::Genetic(std::mt19937 &gen, const int size) : gen{gen}, counter{0} {
+Genetic<T>::Genetic(const int size) : counter{0} {
+    std::random_device rd;
+    gen = std::mt19937(rd());
+
     population.reserve(size);
 
     for(int i=0; i<size; i++) {
@@ -59,10 +62,9 @@ int Genetic<T>::epoch() const {
 
 template<typename T>
 void Genetic<T>::evaluate() {
-    std::vector<double> fitness;
-    fitness.reserve(population.size());
+    std::vector<double> fitness(population.size());
 
-    std::transform(population.begin(), population.end(), std::back_inserter(fitness), [](const T &member) {
+    std::transform(population.begin(), population.end(), fitness.begin(), [](const T &member) {
         return member.fitness();
     });
 
