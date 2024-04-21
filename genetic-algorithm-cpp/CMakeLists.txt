@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.16)
 
 project(genetic-algorithm-cpp)
 
@@ -15,4 +15,5 @@ target_compile_options(${PROJECT_NAME} PUBLIC
     -Wall
     -Wextra
     -Wpedantic
+    -O3
 )

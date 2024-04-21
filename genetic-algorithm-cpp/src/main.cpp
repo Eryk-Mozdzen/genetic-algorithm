@@ -7,7 +7,7 @@
 int main() {
     std::cout << std::setprecision(3) << std::fixed;
 
-    Genetic<Member> genetic(100);
+    Genetic<Member> genetic(10000);
 
     while(true) {
         const Member &result = genetic.fittest();

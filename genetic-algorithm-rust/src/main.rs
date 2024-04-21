@@ -6,13 +6,13 @@ use genetic::MemberInterface;
 use member::Member;
 
 fn main() {
-    let mut genetic = Genetic::<Member>::new(100);
+    let mut genetic = Genetic::<Member>::new(10000);
 
     loop {
         let result = genetic.fittest();
         let fitness = result.fitness();
 
-        println!("{:5} {:.3} {}", genetic.epoch(), fitness, result);
+        println!("{:10}{:10.3}{:>32}", genetic.epoch(), fitness, result);
 
         if fitness > 1000_f32 {
             break;

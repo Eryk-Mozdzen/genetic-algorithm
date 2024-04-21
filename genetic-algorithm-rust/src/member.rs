@@ -56,7 +56,7 @@ impl MemberInterface for Member {
 
         if diff==0 {
             //return f32::INFINITY;
-            return f32::MAX;
+            return 1_000_000_f32;
         }
 
         return 1_f32 / diff as f32;
@@ -65,6 +65,6 @@ impl MemberInterface for Member {
 
 impl fmt::Display for Member {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.content)
+        fmt::Display::fmt(&self.content, f)
     }
 }
