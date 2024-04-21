@@ -1,4 +1,3 @@
 
-cpp/**/build
-
-rust/**/target
+genetic-algorithm-cpp/**/build
+genetic-algorithm-rust/**/target

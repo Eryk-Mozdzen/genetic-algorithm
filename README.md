@@ -4,7 +4,7 @@ Very simple example of implementation and usage of genetic algorithm concept.
 ## C++ example
 ```
 git clone https://github.com/Eryk-Mozdzen/genetic-algorithm.git
-cd genetic-algorithm/cpp
+cd genetic-algorithm/genetic-algorithm-cpp
 mkdir build
 cd build
 
@@ -16,7 +16,7 @@ make
 ## Rust example
 ```
 git clone https://github.com/Eryk-Mozdzen/genetic-algorithm.git
-cd genetic-algorithm/rust/genetic-algorithm
+cd genetic-algorithm/genetic-algorithm-rust
 
 cargo run
 ```
