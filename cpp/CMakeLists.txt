@@ -4,7 +4,7 @@ project(genetic-algorithm)
 
 add_executable(${PROJECT_NAME}
     "src/main.cpp"
-    "src/String.cpp"
+    "src/Member.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

@@ -10,9 +10,6 @@ class Genetic {
     std::vector<T> population;
     int counter;
 
-    const T & random(const std::vector<double> &weights);
-    const T & fittest(const std::vector<double> &weights) const;
-
 public:
     Genetic(const int size);
 
@@ -34,23 +31,6 @@ Genetic<T>::Genetic(const int size) : counter{0} {
 }
 
 template<typename T>
-const T & Genetic<T>::random(const std::vector<double> &weights) {
-    std::discrete_distribution<int> distrib(weights.begin(), weights.end());
-
-    const int index = distrib(gen);
-
-    return population.at(index);
-}
-
-template<typename T>
-const T & Genetic<T>::fittest(const std::vector<double> &weights) const {
-    const auto it = std::max_element(weights.begin(), weights.end());
-    const int index = std::distance(weights.begin(), it);
-
-    return population.at(index);
-}
-
-template<typename T>
 const T & Genetic<T>::fittest() const {
     return population.front();
 }
@@ -62,20 +42,26 @@ int Genetic<T>::epoch() const {
 
 template<typename T>
 void Genetic<T>::evaluate() {
-    std::vector<double> fitness(population.size());
+    std::vector<double> weights;
+    weights.reserve(population.size());
 
-    std::transform(population.begin(), population.end(), fitness.begin(), [](const T &member) {
-        return member.fitness();
-    });
+    for(const T &member : population) {
+        weights.push_back(member.fitness());
+    }
+
+    const auto bestIterator = std::max_element(weights.begin(), weights.end());
+    const int bestIndex = std::distance(weights.begin(), bestIterator);
 
     std::vector<T> next;
     next.reserve(population.size());
 
-    next.push_back(fittest(fitness));
+    next.push_back(population[bestIndex]);
+
+    std::discrete_distribution<int> distribution(weights.begin(), weights.end());
 
     for(unsigned int i=1; i<population.size(); i++) {
-        const T &parent1 = random(fitness);
-        const T &parent2 = random(fitness);
+        const T &parent1 = population[distribution(gen)];
+        const T &parent2 = population[distribution(gen)];
 
         next.emplace_back(gen, parent1, parent2);
     }

@@ -1,14 +1,22 @@
-# C++ genetic algorithm
-Very simple example of implementation and usage of genetic algorithm concept in C++.
+# Genetic algorithm
+Very simple example of implementation and usage of genetic algorithm concept.
 
-## Build & Run
+## C++ example
 ```
-    git clone https://github.com/Eryk-Mozdzen/genetic-algorithm.git
-    cd genetic-algorithm
-    mkdir build
-    cd build
+git clone https://github.com/Eryk-Mozdzen/genetic-algorithm.git
+cd genetic-algorithm/cpp
+mkdir build
+cd build
 
-    cmake ..
-    make
-    ./genetic-algorithm
+cmake ..
+make
+./genetic-algorithm
+```
+
+## Rust example
+```
+git clone https://github.com/Eryk-Mozdzen/genetic-algorithm.git
+cd genetic-algorithm/rust/genetic-algorithm
+
+cargo run
 ```

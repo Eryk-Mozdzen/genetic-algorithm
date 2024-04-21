@@ -1,10 +1,10 @@
 #include <cstring>
 
-#include "String.h"
+#include "Member.h"
 
 constexpr char target[] = "I'm Skynet and I will be back!";
 
-String::String(std::mt19937 &gen) {
+Member::Member(std::mt19937 &gen) {
     std::uniform_int_distribution<char> distrib(' ', '}');
 
     for(unsigned int i=0; i<strlen(target); i++) {
@@ -12,7 +12,7 @@ String::String(std::mt19937 &gen) {
     }
 }
 
-String::String(std::mt19937 &gen, const String &parent1, const String &parent2) {
+Member::Member(std::mt19937 &gen, const Member &parent1, const Member &parent2) {
     std::bernoulli_distribution distributionBool;
 
     for(unsigned int i=0; i<strlen(target); i++) {
@@ -35,7 +35,7 @@ String::String(std::mt19937 &gen, const String &parent1, const String &parent2) 
     }
 }
 
-double String::fitness() const {
+double Member::fitness() const {
     int diff = 0;
 
     for(unsigned int i=0; i<strlen(target); i++) {
@@ -51,7 +51,7 @@ double String::fitness() const {
     return 1./diff;
 }
 
-std::ostream & operator<<(std::ostream &stream, const String &string) {
+std::ostream & operator<<(std::ostream &stream, const Member &string) {
     stream << string.data;
     return stream;
 }
